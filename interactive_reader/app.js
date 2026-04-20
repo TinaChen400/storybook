@@ -110,6 +110,12 @@ function initEventListeners() {
         el.editorLayer.addEventListener('mousemove', draw);
         window.addEventListener('mouseup', endDrawing);
     }
+
+    // Caption Bar V5.1
+    document.getElementById('close-caption').addEventListener('click', () => {
+        stopVoice();
+    });
+    initDraggable(document.getElementById('caption-bar'), document.getElementById('caption-drag-handle'));
 }
 
 // ============ PDF HANDLING ============
@@ -803,22 +809,41 @@ async function loadVoices() {
 
 function playCurrentHotspot() {
     if (!state.currentHotspot) return;
-    stopVoice();
     
+    // V5.1: Proactive cleanup before NEW playback
+    // Important: we DON'T call stopVoice() directly here because it might 
+    // trigger an async 'onend' that clears the NEW UI we are about to build.
+    if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+    }
+    if (state.audio) {
+        state.audio.onend = null;
+        state.audio.onerror = null;
+        state.audio.onboundary = null;
+    }
+    cleanupReadingUI(); 
+
     const normalized = normalizeHotspot(state.currentHotspot);
     const text = state.currentLanguage === 'en' ? normalized.text_en : normalized.text_zh;
     if (!text) return;
     
-    // --- V5: Read-Along UI Setup ---
+    // Use the activeReadingBox found in selectHotspot
+    if (state.activeReadingBox) {
+        state.activeReadingBox.classList.add('reading');
+        el.hotspotLayer.classList.add('active-reading');
+    }
+
+    // --- V5.1: UI Setup ---
     el.captionBar.classList.remove('hidden');
     
-    // Split text into words and space segments, calculating indices for karaoke sync
+    // Split text into words and space segments
     const wordsAndSpaces = text.split(/(\s+)/);
     let runningCharIndex = 0;
     el.captionText.innerHTML = wordsAndSpaces.map(part => {
         const start = runningCharIndex;
         runningCharIndex += part.length;
         if (part.trim().length > 0) {
+            // Encode the range to handle overlaps correctly
             return `<span class="reading-word" data-start="${start}" data-end="${runningCharIndex}">${part}</span>`;
         }
         return part;
@@ -829,14 +854,13 @@ function playCurrentHotspot() {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = state.currentLanguage === 'en' ? state.voices.en : state.voices.cn;
     
-    // --- V5: Karaoke Sync Logic ---
+    // --- V5.1: Karaoke Sync Logic ---
     utterance.onboundary = (event) => {
         if (event.name === 'word') {
             const charIndex = event.charIndex;
             wordSpans.forEach(span => {
                 const start = parseInt(span.dataset.start);
                 const end = parseInt(span.dataset.end);
-                // Check if current speaking character falls within this word block
                 if (charIndex >= start && charIndex < end) {
                     span.classList.add('active');
                     span.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
@@ -849,6 +873,9 @@ function playCurrentHotspot() {
 
     utterance.onstart = () => {
         console.log('Reading started...');
+        // Spotlight on
+        if (state.activeReadingBox) state.activeReadingBox.classList.add('reading');
+        el.hotspotLayer.classList.add('active-reading');
     };
 
     utterance.onend = () => {
@@ -866,6 +893,10 @@ function playCurrentHotspot() {
 }
 
 function stopVoice() {
+    if (state.audio) {
+        state.audio.onend = null;
+        state.audio.onerror = null;
+    }
     speechSynthesis.cancel();
     cleanupReadingUI();
 }
@@ -874,24 +905,51 @@ function cleanupReadingUI() {
     if (el.captionBar) el.captionBar.classList.add('hidden');
     if (el.hotspotLayer) el.hotspotLayer.classList.remove('active-reading');
     document.querySelectorAll('.hotspot-box.reading').forEach(b => b.classList.remove('reading'));
-    state.activeReadingBox = null;
+    // Do NOT clear state.activeReadingBox here, as it might be needed for re-triggering logic
 }
 
 function selectHotspot(hotspot, element) {
     state.currentHotspot = hotspot;
-    
-    // V5: Visual Spotlight
-    cleanupReadingUI(); // Reset prev
-    if (element) {
-        element.classList.add('reading');
-        el.hotspotLayer.classList.add('active-reading');
-        state.activeReadingBox = element;
-    }
-    
+    state.activeReadingBox = element; // Store the element for playCurrentHotspot
     playCurrentHotspot();
 }
 
 // ============ UTILITIES ============
+
+function initDraggable(el, handle) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    handle.onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        el.style.top = (el.offsetTop - pos2) + "px";
+        el.style.left = (el.offsetLeft - pos1) + "px";
+        el.style.bottom = 'auto'; // Disable bottom constraint once moved
+        el.style.transform = 'translateX(-50%)'; // Keep center alignment logic if possible or just center manually
+        // If we move it, we might want to kill the default center transform to avoid weird offsets
+        el.style.transform = 'none';
+        el.style.left = (el.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
+}
 
 function showToast(message) {
     const toast = document.getElementById('toast');
