@@ -848,8 +848,9 @@ function playCurrentHotspot() {
     
     // --- V5.2: Sentence Sync Logic ---
     utterance.onboundary = (event) => {
-        // Even if we highlight sentences, 'word' boundary is the most reliable cross-browser event
         const charIndex = event.charIndex;
+        console.log(`Speech boundary [${event.name}]: charIndex ${charIndex}`);
+        
         sentenceSpans.forEach(span => {
             const start = parseInt(span.dataset.start);
             const end = parseInt(span.dataset.end);
@@ -863,10 +864,15 @@ function playCurrentHotspot() {
     };
 
     utterance.onstart = () => {
-        console.log('Reading started...');
-        // Spotlight on
+        console.log('Reading started for text:', text.substring(0, 30) + '...');
         if (state.activeReadingBox) state.activeReadingBox.classList.add('reading');
         el.hotspotLayer.classList.add('active-reading');
+        
+        // V5.3: Fallback - Highlight first sentence immediately if nothing is active yet
+        if (!el.captionText.querySelector('.active')) {
+            const first = el.captionText.querySelector('.reading-sentence');
+            if (first) first.classList.add('active');
+        }
     };
 
     utterance.onend = () => {
