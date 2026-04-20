@@ -833,42 +833,33 @@ function playCurrentHotspot() {
         el.hotspotLayer.classList.add('active-reading');
     }
 
-    // --- V5.1: UI Setup ---
+    // --- V5.2: Sentence-Level UI Setup ---
     el.captionBar.classList.remove('hidden');
     
-    // Split text into words and space segments
-    const wordsAndSpaces = text.split(/(\s+)/);
-    let runningCharIndex = 0;
-    el.captionText.innerHTML = wordsAndSpaces.map(part => {
-        const start = runningCharIndex;
-        runningCharIndex += part.length;
-        if (part.trim().length > 0) {
-            // Encode the range to handle overlaps correctly
-            return `<span class="reading-word" data-start="${start}" data-end="${runningCharIndex}">${part}</span>`;
-        }
-        return part;
-    }).join('');
+    const sentences = splitIntoSentences(text);
+    el.captionText.innerHTML = sentences.map(s => 
+        `<span class="reading-sentence" data-start="${s.start}" data-end="${s.end}">${s.text}</span>`
+    ).join(' ');
     
-    const wordSpans = el.captionText.querySelectorAll('.reading-word');
+    const sentenceSpans = el.captionText.querySelectorAll('.reading-sentence');
     
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = state.currentLanguage === 'en' ? state.voices.en : state.voices.cn;
     
-    // --- V5.1: Karaoke Sync Logic ---
+    // --- V5.2: Sentence Sync Logic ---
     utterance.onboundary = (event) => {
-        if (event.name === 'word') {
-            const charIndex = event.charIndex;
-            wordSpans.forEach(span => {
-                const start = parseInt(span.dataset.start);
-                const end = parseInt(span.dataset.end);
-                if (charIndex >= start && charIndex < end) {
-                    span.classList.add('active');
-                    span.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-                } else {
-                    span.classList.remove('active');
-                }
-            });
-        }
+        // Even if we highlight sentences, 'word' boundary is the most reliable cross-browser event
+        const charIndex = event.charIndex;
+        sentenceSpans.forEach(span => {
+            const start = parseInt(span.dataset.start);
+            const end = parseInt(span.dataset.end);
+            if (charIndex >= start && charIndex < end) {
+                span.classList.add('active');
+                span.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            } else {
+                span.classList.remove('active');
+            }
+        });
     };
 
     utterance.onstart = () => {
@@ -915,6 +906,29 @@ function selectHotspot(hotspot, element) {
 }
 
 // ============ UTILITIES ============
+
+function splitIntoSentences(text) {
+    // Regex to split by . ! ? 。 ！ ？ while preserving the delimiter
+    // This handles both English and Chinese punctuation
+    const sentenceRegex = /([^.!?。！？]+[.!?。！？]*)/g;
+    const sentences = [];
+    let match;
+    
+    while ((match = sentenceRegex.exec(text)) !== null) {
+        sentences.push({
+            text: match[0],
+            start: match.index,
+            end: match.index + match[0].length
+        });
+    }
+    
+    // Fallback if no punctuation is found
+    if (sentences.length === 0 && text.length > 0) {
+        sentences.push({ text: text, start: 0, end: text.length });
+    }
+    
+    return sentences;
+}
 
 function initDraggable(el, handle) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;

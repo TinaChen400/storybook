@@ -852,19 +852,21 @@ body {
     letter-spacing: -0.02em;
 }
 
-.reading-word {
-    display: inline-block;
-    transition: all 0.2s ease;
-    margin: 0 3px;
-    opacity: 0.4;
-    transform: scale(0.95);
+.reading-sentence {
+    display: inline;
+    transition: all 0.3s ease;
+    padding: 2px 4px;
+    border-radius: 6px;
+    opacity: 0.35;
+    background-color: transparent;
 }
 
-.reading-word.active {
+.reading-sentence.active {
     opacity: 1 !important;
-    color: var(--secondary) !important;
-    transform: scale(1.1);
-    text-shadow: 0 0 15px rgba(77, 150, 255, 0.3);
+    color: var(--text-main) !important;
+    background-color: rgba(77, 150, 255, 0.15);
+    box-shadow: 0 0 15px rgba(77, 150, 255, 0.1);
+    font-weight: 700;
 }
 
 .hotspot-box.reading {
