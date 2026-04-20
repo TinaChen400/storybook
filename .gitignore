@@ -1,0 +1,34 @@
+# IDE
+.vscode/
+
+# Build and Gradle
+.gradle/
+build/
+bin/
+out/
+*.class
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Backend Specific
+storybookv2/backend-kotlin/.gradle/
+storybookv2/backend-kotlin/build/
+storybookv2/backend-kotlin/uploads/*
+!storybookv2/backend-kotlin/uploads/.gitkeep
+
+# Data and Artifacts
+pdf/
+book1/
+book_clay/
+demo/
+scratch/
+models/
+
+# Media
+*.mp4
+*.wav
+*.mp3

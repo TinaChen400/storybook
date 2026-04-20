@@ -1,0 +1,448 @@
+{
+  "books": [
+    {
+      "id": "book_clay",
+      "title": "Clay Vesselin (Ancient Rome)",
+      "folder": "../book_clay/",
+      "cover": "../book_clay/page_001.jpg",
+      "pages": [
+        {
+          "image": "page_001.jpg",
+          "hotspots": [
+            {
+              "x": 62.0,
+              "y": 28.0,
+              "w": 25.0,
+              "h": 8.0,
+              "text_en": "Ancient Rome",
+              "text_zh": "古罗马"
+            },
+            {
+              "x": 61.0,
+              "y": 18.0,
+              "w": 28.0,
+              "h": 4.0,
+              "text_en": "Eyewitness",
+              "text_zh": "目击者系列"
+            },
+            {
+              "x": 4.0,
+              "y": 6.0,
+              "w": 18.0,
+              "h": 15.0,
+              "text_en": "Clay vessel in form of pig",
+              "text_zh": "小猪造型的陶罐"
+            },
+            {
+              "x": 5.0,
+              "y": 42.0,
+              "w": 20.0,
+              "h": 45.0,
+              "text_en": "Bronze statue of Venus adjusting her sandal",
+              "text_zh": "维纳斯正在调整凉鞋的青铜像"
+            },
+            {
+              "x": 28.0,
+              "y": 74.0,
+              "w": 22.0,
+              "h": 22.0,
+              "text_en": "Bronze lamp in form of dog with hare in mouth",
+              "text_zh": "衔着野兔的狗形青铜灯"
+            }
+          ]
+        },
+        {
+          "image": "page_002.jpg",
+          "hotspots": [
+            {
+              "x": 4.0,
+              "y": 27.0,
+              "w": 28.0,
+              "h": 18.0,
+              "text_en": "Contents",
+              "text_zh": "目录"
+            },
+            {
+              "x": 13.0,
+              "y": 32.5,
+              "w": 20.0,
+              "h": 2.5,
+              "text_en": "The rise of Rome",
+              "text_zh": "罗马的崛起"
+            },
+            {
+              "x": 13.0,
+              "y": 35.5,
+              "w": 20.0,
+              "h": 2.5,
+              "text_en": "Rome's emperors",
+              "text_zh": "罗马皇帝"
+            },
+            {
+              "x": 13.0,
+              "y": 38.5,
+              "w": 20.0,
+              "h": 2.5,
+              "text_en": "The legions",
+              "text_zh": "罗马军团"
+            },
+            {
+              "x": 13.0,
+              "y": 41.5,
+              "w": 20.0,
+              "h": 2.5,
+              "text_en": "Army life",
+              "text_zh": "军队生活"
+            }
+          ]
+        },
+        {
+          "image": "page_003.jpg",
+          "hotspots": [
+            {
+              "x": 5.0,
+              "y": 3.0,
+              "w": 30.0,
+              "h": 10.0,
+              "text_en": "Rome's emperors. Rome was not always ruled by emperors. For nearly 500 years, Rome was a republic ruled by a Senate.",
+              "text_zh": "罗马皇帝。罗马并非一直由皇帝统治。在近500年的时间里，罗马是一个由参议院统治的共和国。"
+            }
+          ]
+        },
+        {
+          "image": "page_004.jpg",
+          "hotspots": [
+            {
+              "x": 4.0,
+              "y": 4.0,
+              "w": 30.0,
+              "h": 8.0,
+              "text_en": "The legions. The Roman army was a powerful fighting force made up of well-trained foot soldiers called legionaries.",
+              "text_zh": "罗马军团。罗马军队是一支由训练有素、被称为“军团士兵”的步兵组成的强大战斗力量。"
+            },
+            {
+              "x": 4.0,
+              "y": 40.0,
+              "w": 28.0,
+              "h": 35.0,
+              "text_en": "Metal jacket. Some body armour was made of metal strips held by leather straps on the inside. It was heavy, but flexible.",
+              "text_zh": "金属护甲。有些身体护甲是由金属片支撑的，内侧由皮革带固定。它虽然沉重，但很灵活。"
+            },
+            {
+              "x": 36.0,
+              "y": 44.0,
+              "w": 18.0,
+              "h": 13.0,
+              "text_en": "Head protector. This helmet was designed to protect the head, face, and neck without blocking vision or hearing.",
+              "text_zh": "头盔（头部保护器）。这款头盔旨在保护头部、面部和颈部，且不会阻碍视线或听觉。"
+            },
+            {
+              "x": 59.0,
+              "y": 80.0,
+              "w": 18.0,
+              "h": 15.0,
+              "text_en": "Boots. Military sandals (caligae) were strong and well ventilated, with patterns of iron hobnails designed to survive miles of marching.",
+              "text_zh": "靴子。军用凉鞋(caligae)坚固且透气，鞋底有铁钉，专为长途跋涉而设计。"
+            }
+          ]
+        },
+        {
+          "image": "page_005.jpg",
+          "hotspots": [
+            {
+              "x": 3.0,
+              "y": 4.0,
+              "w": 30.0,
+              "h": 8.0,
+              "text_en": "Army life. By the beginning of the 1st century CE, the Romans had already conquered most of the lands that would be their empire.",
+              "text_zh": "军队生活。到公元1世纪初，罗马人已经征服了其帝国的大部分土地。"
+            },
+            {
+              "x": 5.0,
+              "y": 43.0,
+              "w": 17.0,
+              "h": 18.0,
+              "text_en": "A Roman fort. Soldiers spent the winter months in stone or timber forts.",
+              "text_zh": "罗马堡垒。士兵们在石头或木制堡垒中度过冬季。"
+            },
+            {
+              "x": 28.0,
+              "y": 6.0,
+              "w": 13.0,
+              "h": 50.0,
+              "text_en": "An auxiliary soldier. Auxiliaries were used to guard and patrol the vast borders of the Roman Empire.",
+              "text_zh": "辅助士兵。辅助部队被用来守卫和巡逻罗马帝国漫长的边境线。"
+            },
+            {
+              "x": 52.0,
+              "y": 3.0,
+              "w": 30.0,
+              "h": 32.0,
+              "text_en": "The cavalry. The cavalry were the eyes of the army, patrolling ahead of the legions, guarding their flanks in battle.",
+              "text_zh": "骑兵。骑兵是军队的“眼睛”，在军团前方巡逻，在战斗中守卫侧翼。"
+            }
+          ]
+        },
+        {
+          "image": "page_006.jpg",
+          "hotspots": [
+            {
+              "x": 4.0,
+              "y": 4.0,
+              "w": 30.0,
+              "h": 10.0,
+              "text_en": "Life of a soldier. Soldiers played important roles in Roman society. Some poorer men joined the army to gain citizenship and a steady income.",
+              "text_zh": "士兵的生活。士兵在罗马社会中扮演着重要角色。一些贫穷的人加入军队是为了获得公民身份和稳定的收入。"
+            },
+            {
+              "x": 10.0,
+              "y": 90.0,
+              "w": 25.0,
+              "h": 8.0,
+              "text_en": "Hadrian's Wall. At Emperor Hadrian's command, the Roman army built a great wall across northern England to mark the empire's boundary.",
+              "text_zh": "哈德良长城。在哈德良皇帝的命令下，罗马军队在英格兰北部修建了一道巨大的城墙，以此标记帝国的边界。"
+            },
+            {
+              "x": 5.0,
+              "y": 62.0,
+              "w": 18.0,
+              "h": 15.0,
+              "text_en": "Clay plaque. Soldiers made their own materials, like this clay plaque which shows a legionary's centaur emblem.",
+              "text_zh": "粘土板。士兵们自行制作材料，比如这块粘土板，上面展示了一个军团的人马座标志。"
+            },
+            {
+              "x": 40.0,
+              "y": 1.0,
+              "w": 35.0,
+              "h": 40.0,
+              "text_en": "Parade mask. In peacetime, soldiers spent a lot of time training and competing in sports. This mask was worn for cavalry displays.",
+              "text_zh": "阅兵面具。在和平时期，士兵们花费大量时间进行训练和体育竞技。这种面具用于骑兵表演。"
+            },
+            {
+              "x": 37.0,
+              "y": 48.0,
+              "w": 25.0,
+              "h": 30.0,
+              "text_en": "Forgotten hoard. These gold pieces, more than four years' pay for a legionary, were hidden in a pot and never reclaimed.",
+              "text_zh": "被遗忘的宝藏。这些金币价值超过一个士兵四年的薪水，被藏在一个罐子里，从未被取回。"
+            },
+            {
+              "x": 65.0,
+              "y": 65.0,
+              "w": 15.0,
+              "h": 12.0,
+              "text_en": "Purse. Soldiers carried cash in leather or bronze purses like this one, often worn around the wrist.",
+              "text_zh": "钱包。士兵们用这种皮革或青铜钱包携带现金，通常佩戴在手腕上。"
+            },
+            {
+              "x": 75.0,
+              "y": 15.0,
+              "w": 20.0,
+              "h": 15.0,
+              "text_en": "Memorial find. Memorial tombstones were quite common in the 1st and 2nd centuries AD, telling us much about the people of the time.",
+              "text_zh": "纪念发现。纪念墓碑在公元1世纪和2世纪非常普遍，向我们展示了当时人们的许多生活细节。"
+            },
+            {
+              "x": 80.0,
+              "y": 35.0,
+              "w": 18.0,
+              "h": 35.0,
+              "text_en": "Tombstone. This broken tombstone was found in Lancashire, England. It shows a cavalryman riding over a fallen enemy.",
+              "text_zh": "墓碑。这块破碎的墓碑发现于英格兰兰开夏郡。它展示了一名骑兵正骑马踏过倒下的敌人。"
+            },
+            {
+              "x": 75.0,
+              "y": 80.0,
+              "w": 20.0,
+              "h": 15.0,
+              "text_en": "Bronze document. When auxiliaries in the provinces completed 25 years of service, they were given a bronze diploma granting them citizenship.",
+              "text_zh": "青铜文书。当行省的外籍辅助兵服役满25年后，他们会被授予一份授予公民身份的青铜证件。"
+            }
+          ]
+        },
+        {
+          "image": "page_007.jpg",
+          "hotspots": [
+            {
+              "x": 16.0,
+              "y": 4.0,
+              "w": 25.0,
+              "h": 12.0,
+              "text_en": "Women in Roman times. Roman women were expected to be dignified wives and good mothers. Some women received an education and became quite independent, but many others were enslaved with no freedom at all.",
+              "text_zh": "罗马时代的女性。罗马女性被期望成为尊贵的妻子和好母亲。一些女性接受过教育并变得相当独立，但许多其他女性则被奴役，完全没有自由。"
+            },
+            {
+              "x": 4.0,
+              "y": 43.0,
+              "w": 18.0,
+              "h": 10.0,
+              "text_en": "Cosmetics. Many Roman women used make-up. A pale complexion was achieved with powdered chalk or white lead. Eyes were lined with soot, and red ochre was used for cheeks and lips.",
+              "text_zh": "化妆品。许多罗马女性使用化妆品。通过粉状粉笔或白铅来达到白皙的肤色。用烟灰勾勒眼线，用红赭石涂抹脸颊和嘴唇。"
+            },
+            {
+              "x": 58.0,
+              "y": 4.0,
+              "w": 18.0,
+              "h": 12.0,
+              "text_en": "Jewellery. Rings, bracelets, and necklaces were widely worn. Common materials included bronze and glass. Many women had their ears pierced for earrings.",
+              "text_zh": "珠宝首饰。戒指、手镯和项链被广泛佩戴。常见材料包括青铜和玻璃。许多女性为了戴耳环而穿了耳洞。"
+            },
+            {
+              "x": 73.0,
+              "y": 82.0,
+              "w": 22.0,
+              "h": 10.0,
+              "text_en": "Occupations. There were few careers for women outside the home, but some became priestesses, ran businesses, worked as midwives, hairdressers, or even doctors.",
+              "text_zh": "职业。家庭之外很少有女性职业，但有些人成为了女祭司、经营商业、担任助产士、理发师甚至医生。"
+            },
+            {
+              "x": 4.0,
+              "y": 75.0,
+              "w": 20.0,
+              "h": 15.0,
+              "text_en": "Spinning and weaving. Spinning wool and weaving cloth were traditional tasks for all Roman women. Even Augustus' daughter Julia was expected to spin and weave.",
+              "text_zh": "纺织与编织。纺毛线和织布是所有罗马女性的传统任务。甚至奥古斯都的女儿朱莉娅也被要求进行纺织。"
+            },
+            {
+              "x": 35.0,
+              "y": 45.0,
+              "w": 15.0,
+              "h": 25.0,
+              "text_en": "Bust. This silver bust portrait shows a lady from the 2nd century AD with an elaborate hairstyle.",
+              "text_zh": "胸像。这尊银质胸像展示了一位公元2世纪发型精致的女士。"
+            },
+            {
+              "x": 30.0,
+              "y": 5.0,
+              "w": 15.0,
+              "h": 40.0,
+              "text_en": "Women's dress. Over an inner tunic of wool or linen, women wore a long dress called a stola, and a cloak (palla) when going out.",
+              "text_zh": "女性服饰。在羊毛或亚麻内衣之上，女性穿着一种叫做 stola 的长裙，出门时还会披上斗篷 (palla)。"
+            }
+          ]
+        },
+        {
+          "image": "page_008.jpg",
+          "hotspots": [
+            {
+              "x": 23.0,
+              "y": 22.0,
+              "w": 16.0,
+              "h": 23.0,
+              "text_en": "Growing up. Some children in Roman times had toys and played games we recognize today. Children from rich families were educated by tutors, but poor children had to work from a young age.",
+              "text_zh": "成长。罗马时代的一些孩子拥有玩具，玩着我们今天依然熟悉的游戏。富裕家庭的孩子由导师教育，但贫穷的孩子从小就必须工作。"
+            },
+            {
+              "x": 14.0,
+              "y": 25.0,
+              "w": 8.5,
+              "h": 11.0,
+              "text_en": "Family outing. Roman children dressed like their parents, and often went with them to official ceremonies and festivals.",
+              "text_zh": "家庭出游。罗马儿童的穿着与父母相似，经常随父母参加官方仪式和节日。"
+            },
+            {
+              "x": 45.0,
+              "y": 23.0,
+              "w": 5.5,
+              "h": 12.0,
+              "text_en": "Rag doll. This much-loved and rather moth-eaten rag doll from Roman times was well preserved in the dry soil of Egypt.",
+              "text_zh": "布娃娃。这个备受喜爱且相当破旧的罗马时期布娃娃在埃及干燥的土壤中保存完好。"
+            },
+            {
+              "x": 63.0,
+              "y": 20.0,
+              "w": 11.0,
+              "h": 10.0,
+              "text_en": "Toxic toy. This toy camel from Egypt would not be allowed into the shops today - it is made of poisonous lead.",
+              "text_zh": "有毒玩具。这只来自埃及的骆驼玩具在今天是不允许进入商店的——它是用有毒的铅制成的。"
+            },
+            {
+              "x": 60.0,
+              "y": 40.0,
+              "w": 10.0,
+              "h": 12.0,
+              "text_en": "Young girl. This fine marble portrait shows a girl of about ten. Her hair is styled like that of adult women of the time.",
+              "text_zh": "小女孩。这尊精美的大理石肖像展示了一名约十岁的女孩。她的发型模仿了当时成年女性的样式。"
+            },
+            {
+              "x": 36.0,
+              "y": 48.0,
+              "w": 6.0,
+              "h": 8.0,
+              "text_en": "Young boy. This marble bust is of a boy aged about five. The strange hair-curl shows that he worships the goddess Isis.",
+              "text_zh": "小男孩。这尊大理石胸像是一个约五岁的男孩。奇怪的卷发显示他崇拜女神伊希斯。"
+            },
+            {
+              "x": 36.0,
+              "y": 58.0,
+              "w": 9.0,
+              "h": 9.0,
+              "text_en": "Taking a nap. Many Roman children were enslaved. The oil flask depicts an enslaved boy dozing while waiting for his master.",
+              "text_zh": "睡午觉。许多罗马儿童被奴役。这个油瓶描绘了一个在等待主人时打瞌睡的奴隶男孩。"
+            },
+            {
+              "x": 53.0,
+              "y": 65.0,
+              "w": 12.0,
+              "h": 5.0,
+              "text_en": "Chariot. This model chariot suggests that the thrills of the racetrack were as exciting for Roman children as they are today.",
+              "text_zh": "战车。这个战车模型表明，赛马场的刺激感对当时的罗马孩子来说和今天一样令人兴奋。"
+            },
+            {
+              "x": 36.0,
+              "y": 85.0,
+              "w": 13.0,
+              "h": 4.0,
+              "text_en": "Toy chariot. Some children of rich families had toy chariots pulled by pet animals like dogs or goats.",
+              "text_zh": "玩具战车。一些富裕家庭的孩子拥有由狗或山羊等宠物拉动的玩具战车。"
+            },
+            {
+              "x": 52.0,
+              "y": 72.0,
+              "w": 14.0,
+              "h": 17.0,
+              "text_en": "EYEWITNESS: Clues from the past. Dr Katie Huntley studies Roman life through archaeology. She has identified more than 150 pieces of graffiti drawn by children.",
+              "text_zh": "目击者：过去的线索。凯蒂·亨特利博士通过考古学研究罗马生活。她已经识别出受孩子们绘制的150多件涂鸦。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "book1",
+      "title": "A Brilliantly Bright Day",
+      "folder": "../book1/",
+      "cover": "../book1/1.jpg",
+      "pages": [
+        {
+          "image": "1.jpg",
+          "hotspots": []
+        },
+        {
+          "image": "2.jpg",
+          "hotspots": []
+        },
+        {
+          "image": "3.jpg",
+          "hotspots": []
+        },
+        {
+          "image": "4.png",
+          "hotspots": []
+        },
+        {
+          "image": "5.jpg",
+          "hotspots": []
+        },
+        {
+          "image": "6.jpg",
+          "hotspots": []
+        },
+        {
+          "image": "7.jpg",
+          "hotspots": []
+        }
+      ]
+    }
+  ]
+}

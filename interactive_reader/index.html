@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Bilingual Storybook Reader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- PDF.js Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Library View -->
+        <div id="library-view" class="view active">
+            <header>
+                <div class="header-content">
+                    <h1>My Magical Library</h1>
+                    <button id="btn-import-pdf" class="btn-import">
+                        <i data-lucide="plus-circle"></i> Import PDF
+                    </button>
+                    <input type="file" id="pdf-upload-input" accept=".pdf" class="hidden">
+                </div>
+                <div class="header-nav-tabs">
+                    <button id="tab-books" class="tab-btn active">📚 My Books</button>
+                    <button id="tab-vocab" class="tab-btn">🧠 Vocabulary</button>
+                </div>
+            </header>
+            <div id="library-content">
+                <div class="library-header">
+                    <h2>My Library</h2>
+                    <p>Select a book to start your learning journey</p>
+                </div>
+                <!-- Book Cards Grid -->
+                <div id="book-grid" class="book-grid"></div>
+            </div>
+
+            <!-- Vocabulary Book Content (Hidden by default) -->
+            <div id="vocabulary-content" class="hidden">
+                <div class="library-header">
+                    <h2>Vocabulary Notebook</h2>
+                    <p>Review and practice your saved words</p>
+                </div>
+                <div id="vocab-grid" class="vocab-grid"></div>
+            </div>
+        </div>
+
+        <!-- Reader View -->
+        <div id="reader-view" class="view">
+            <nav class="reader-nav">
+                <button id="back-to-library" class="btn-icon" title="Library">
+                    <i data-lucide="library"></i>
+                </button>
+                <div class="reader-title-group">
+                    <div class="reader-title" id="current-book-title">Story Title</div>
+                    <span id="sync-badge" class="sync-badge saved" title="Cloud Sync Status">
+                    <span class="sync-icon">☁️</span>
+                    <span class="sync-text">Cloud Sync</span>
+                </span>
+                <button id="rotate-btn" class="nav-btn-icon rotate-btn" title="Rotate Page (90°)">
+                    <span>🔄</span>
+                </button>
+                <button id="bulk-scan-btn" class="nav-btn-icon scan-all-btn" title="Scan Entire Book">
+                    <span>📚</span>
+                </button>
+                <button id="ai-scan-btn" class="ai-status-badge" title="Start AI Recognition">
+                    <span class="ai-icon">✨</span>
+                    <span id="ai-status-text" class="ai-text">AI Scan Page</span>
+                </button>
+                <div class="reader-controls">
+                    <button id="toggle-language" class="btn-text">
+                        <span id="lang-label">English</span>
+                        <i data-lucide="languages"></i>
+                    </button>
+                    <button id="toggle-editor" class="btn-icon" title="Editor Mode">
+                        <i data-lucide="edit-3"></i>
+                    </button>
+                </div>
+            </nav>
+
+            <main class="page-container">
+                <div class="page-viewport" id="page-viewport">
+                    <img id="page-image" src="" alt="Book Page">
+                    <div id="hotspot-layer" class="hotspot-layer"></div>
+                    <div id="editor-layer" class="editor-layer hidden"></div>
+                </div>
+                
+                <button id="prev-page" class="nav-btn prev">
+                    <i data-lucide="chevron-left"></i>
+                </button>
+                <button id="next-page" class="nav-btn next">
+                    <i data-lucide="chevron-right"></i>
+                </button>
+            </main>
+
+            <footer class="reader-footer">
+                <div class="page-info">
+                   Page <span id="current-page-num">1</span> of <span id="total-pages-num">?</span>
+                </div>
+                <div class="voice-controls">
+                    <button id="play-voice" class="btn-icon" title="Play">
+                        <i data-lucide="play"></i>
+                    </button>
+                    <button id="pause-voice" class="btn-icon" title="Pause">
+                        <i data-lucide="pause"></i>
+                    </button>
+                    <button id="stop-voice" class="btn-icon" title="Stop">
+                        <i data-lucide="square"></i>
+                    </button>
+                    <select id="voice-select-en" class="select-voice"></select>
+                    <select id="voice-select-cn" class="select-voice"></select>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Editor Panel (Floating) -->
+        <div id="editor-panel" class="editor-panel hidden">
+            <h3>Editor Mode</h3>
+            <div id="ocr-preview-container" class="ocr-preview-container">
+                <h4>AI Vision Preview</h4>
+                <canvas id="ocr-preview-canvas"></canvas>
+            </div>
+            <p>Click and drag on the page to create a box.</p>
+            <div class="header-nav-tabs">
+                <button id="editor-tab-books" class="tab-btn active">📚 My Books</button>
+                <button id="editor-tab-vocab" class="tab-btn">🧠 Vocabulary</button>
+            </div>
+            <div class="header-actions">
+                <button id="clear-hotspots" class="btn-small">Clear All</button>
+                <button id="translate-all" class="btn-small btn-secondary">Translate All</button>
+                <button id="save-hotspots" class="btn-small btn-primary" title="Save to Cloud">
+                    <i data-lucide="cloud-upload"></i> Save Cloud
+                </button>
+                <button id="restart-ocr" class="btn-small" title="Restart AI Engine">
+                    <i data-lucide="refresh-cw"></i> Restart AI
+                </button>
+                <button id="copy-json" class="btn-small btn-primary">Copy JSON</button>
+            </div>
+            <div id="ocr-status-container" style="font-size: 10px; opacity: 0.5; margin-bottom: 5px;">
+                Status: <span id="ocr-status">Ready</span>
+            </div>
+            <div id="hotspot-list" class="hotspot-list">
+                <!-- List of created hotspots for editing text -->
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="app.js?v=2026.4.16.v3"></script>
+    <script>
+        console.log("Storybook interactive reader loaded");
+        // Initialize lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

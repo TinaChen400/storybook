@@ -1,0 +1,47 @@
+{
+  "project_root": "D:/Dev/stroybook/book1",
+  "output_root": "D:/Dev/stroybook/book1/_output",
+  "story_json": "D:/Dev/stroybook/book1/_output/story_16p.json",
+  "comfyui": {
+    "api_url": "http://127.0.0.1:8188",
+    "start_bat": "D:/ComfyUI/Start_Comfy_Server.bat",
+    "model": "v1-5-pruned-emaonly.safetensors",
+    "clip_vision": "clip_vision_vit_h.safetensors",
+    "ipadapter": "ip-adapter_sd15.safetensors",
+    "width": 4096,
+    "height": 2048,
+    "steps": 28,
+    "cfg": 6.5,
+    "sampler": "euler",
+    "scheduler": "simple",
+    "ipadapter_weight": 0.35,
+    "seed": 12345,
+    "style_blur_radius": 18,
+    "seed_offset_per_page": 37,
+    "skybox_prompt": "equirectangular 360 panorama, skybox, seamless, clear horizon, wide open environment, smooth zenith and nadir, avoid pole artifacts, no tiny planet",
+    "depth_prompt": "three depth layers, foreground framing with branches, leaves, rocks, grass; midground path, cottages, fences; distant mountains, treeline, sky; atmospheric perspective, distant desaturated bluish haze; ground texture detail fades with distance; contact shadows; leading lines (path, river, fence, light beams); single directional sunlight with soft fill",
+    "no_characters_negative": "characters, people, animals, creatures, faces, bodies, hands, legs, feet",
+    "panorama_negative": "tiny planet, fisheye, extreme wide angle, pole distortion, pinched poles, zenith seam, nadir seam, warped horizon, stitching artifacts"
+  },
+  "tts": {
+    "engine": "chattts",
+    "voice": "chattts_childlike",
+    "sentence_gap": 0.2,
+    "chattts_model_path": "C:/Users/Administrator/.cache/huggingface/hub/models--2Noise--ChatTTS/snapshots/1a3c04a8b0651689bd9242fbb55b1f4b5a9aef84",
+    "chattts_speaker_path": "D:/Dev/stroybook/pipeline/chattts_speaker.txt",
+    "chattts_speed": "[speed_4]"
+  },
+  "web": {
+    "title": "Brilliantly Bright Day",
+    "language": "en-GB"
+  },
+  "viewer": {
+    "pitch": 0,
+    "yaw": 0,
+    "hfov": 80,
+    "minHfov": 60,
+    "maxHfov": 95,
+    "minPitch": -35,
+    "maxPitch": 35
+  }
+}
