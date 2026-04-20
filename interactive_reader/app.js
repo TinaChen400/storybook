@@ -419,12 +419,7 @@ function renderHotspots(hotspots) {
         box.style.width = width + 'px';
         box.style.height = height + 'px';
         
-        // Normalize text
-        const text = state.currentLanguage === 'en' 
-            ? (hotspot.text_en || hotspot.text || '') 
-            : (hotspot.text_zh || hotspot.translatedText || hotspot.text || '');
-            
-        box.innerHTML = `<span class="hotspot-text">${text}</span>`;
+        // V6 upgrade: No manual innerHTML text; keep it clean and invisible by default
         box.addEventListener('click', (e) => {
             e.stopPropagation();
             selectHotspot(hotspot, box);

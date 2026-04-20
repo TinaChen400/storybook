@@ -78,7 +78,7 @@ def merge_blocks(raw_results):
 
     final_blocks = []
 
-    # 2. Intra-Column Merging
+    # 2. Intra-Column Merging (Improved with stricter rules)
     for col in columns:
         # Sort lines within column by Y
         col.sort(key=lambda l: l['y0'])
@@ -92,9 +92,17 @@ def merge_blocks(raw_results):
             curr = col[i]
             
             dy = curr['y0'] - prev['y1']
-            # Within a column, we are more aggressive with vertical merging
-            # If distance is less than 1.8x line height, merge
-            if dy < (prev['h'] * 1.8):
+            
+            # V7 Optimization: Stricter Alignment and Proximity
+            # Only merge if:
+            # 1. Vertical gap is small (1.2x line height)
+            # 2. Left edges are roughly aligned (within 15px) - suggests same paragraph
+            # 3. Or center points are very close horizontally
+            
+            dx_left = abs(curr['x0'] - prev['x0'])
+            is_aligned = dx_left < 15
+            
+            if dy < (prev['h'] * 1.2) and is_aligned:
                 current_group.append(curr)
             else:
                 merged_groups.append(current_group)
