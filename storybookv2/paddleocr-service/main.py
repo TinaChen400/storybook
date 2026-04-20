@@ -51,7 +51,6 @@ def merge_blocks(raw_results):
         return [], []
 
     # 1. Column Clustering (Group lines that occupy similar horizontal space)
-    # We sort by X center first
     lines.sort(key=lambda l: l['x0'])
     
     columns = []
@@ -61,15 +60,13 @@ def merge_blocks(raw_results):
             prev = current_col[-1]
             curr = lines[i]
             
-            # If current line overlaps significantly with the column's horizontal range
-            # We use a simple overlap check
+            # V9 Optimization: Stricter Column Isolation
             col_x0 = min([l['x0'] for l in current_col])
             col_x1 = max([l['x1'] for l in current_col])
             
             overlap = max(0, min(col_x1, curr['x1']) - max(col_x0, curr['x0']))
-            # If overlap is more than 40% of the thinner line, consider it same column region
-            # This helps group multi-column layouts correctly
-            if overlap > (min(col_x1-col_x0, curr['x1']-curr['x0']) * 0.4):
+            # V9: From 0.4 to 0.75 overlap requirement to prevent merging side-by-side columns
+            if overlap > (min(col_x1-col_x0, curr['x1']-curr['x0']) * 0.75):
                 current_col.append(curr)
             else:
                 columns.append(current_col)
@@ -78,11 +75,11 @@ def merge_blocks(raw_results):
 
     final_blocks = []
 
-    # 2. Intra-Column Merging (Improved with V8 Header-Aware Splitting)
+    # 2. Intra-Column Merging (V9 Extreme Tightening)
     for col in columns:
         if not col: continue
         
-        # Calculate median height for the whole column to identify headers
+        # Calculate median height
         heights = sorted([l['h'] for l in col])
         median_h = heights[len(heights)//2] if heights else 1
         
@@ -98,33 +95,26 @@ def merge_blocks(raw_results):
             
             dy = curr['y0'] - prev['y1']
             
-            # V8 Enrichment: Header detection (Bold/Large text)
-            # Headers are usually significantly taller than body text
-            is_header = curr['h'] > (median_h * 1.3)
-            was_header = prev['h'] > (median_h * 1.3)
+            # V9 Thresholds:
+            # Header detected if 15% taller (not 30%)
+            is_header = curr['h'] > (median_h * 1.15)
+            was_header = prev['h'] > (median_h * 1.15)
             
-            # V7 Context: Stricter Alignment
+            # Alignment check: strict 8px tolerance
             dx_left = abs(curr['x0'] - prev['x0'])
-            is_aligned = dx_left < 15
-            
-            # Merging Rules for V8:
-            # 1. NEW Headers ALWAYS start a group
-            # 2. Body text don't append to a single-line Header if gap is large
-            # 3. Aligned body text merges normally
+            is_aligned = dx_left < 8
             
             if is_header:
-                # Forced split: New header detected
                 merged_groups.append(current_group)
                 current_group = [curr]
-            elif was_header and dy > (prev['h'] * 1.0):
-                # Split: Body text below a header should be its own block if not immediate
+            elif was_header and dy > (prev['h'] * 0.8):
+                # Even tighter break after header
                 merged_groups.append(current_group)
                 current_group = [curr]
-            elif dy < (prev['h'] * 1.25) and is_aligned:
-                # Merge: Standard paragraph flow
+            elif dy < (prev['h'] * 1.1) and is_aligned:
+                # Merge: Only if very close and very aligned
                 current_group.append(curr)
             else:
-                # Split: Large gap or misalignment
                 merged_groups.append(current_group)
                 current_group = [curr]
                 
