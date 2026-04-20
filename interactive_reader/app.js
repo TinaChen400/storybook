@@ -44,7 +44,9 @@ const el = {
     ocrStatus: document.getElementById('ocr-status'),
     hotspotList: document.getElementById('hotspot-list'),
     voiceSelectEn: document.getElementById('voice-select-en'),
-    voiceSelectCn: document.getElementById('voice-select-cn')
+    voiceSelectCn: document.getElementById('voice-select-cn'),
+    captionBar: document.getElementById('caption-bar'),
+    captionText: document.getElementById('caption-text')
 };
 
 // ============ INITIALIZATION ============
@@ -419,7 +421,7 @@ function renderHotspots(hotspots) {
         box.innerHTML = `<span class="hotspot-text">${text}</span>`;
         box.addEventListener('click', (e) => {
             e.stopPropagation();
-            selectHotspot(hotspot);
+            selectHotspot(hotspot, box);
         });
         
         el.hotspotLayer.appendChild(box);
@@ -803,23 +805,89 @@ function playCurrentHotspot() {
     if (!state.currentHotspot) return;
     stopVoice();
     
-    // Use normalization utility for TTS
     const normalized = normalizeHotspot(state.currentHotspot);
     const text = state.currentLanguage === 'en' ? normalized.text_en : normalized.text_zh;
-    
     if (!text) return;
+    
+    // --- V5: Read-Along UI Setup ---
+    el.captionBar.classList.remove('hidden');
+    
+    // Split text into words and space segments, calculating indices for karaoke sync
+    const wordsAndSpaces = text.split(/(\s+)/);
+    let runningCharIndex = 0;
+    el.captionText.innerHTML = wordsAndSpaces.map(part => {
+        const start = runningCharIndex;
+        runningCharIndex += part.length;
+        if (part.trim().length > 0) {
+            return `<span class="reading-word" data-start="${start}" data-end="${runningCharIndex}">${part}</span>`;
+        }
+        return part;
+    }).join('');
+    
+    const wordSpans = el.captionText.querySelectorAll('.reading-word');
     
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = state.currentLanguage === 'en' ? state.voices.en : state.voices.cn;
+    
+    // --- V5: Karaoke Sync Logic ---
+    utterance.onboundary = (event) => {
+        if (event.name === 'word') {
+            const charIndex = event.charIndex;
+            wordSpans.forEach(span => {
+                const start = parseInt(span.dataset.start);
+                const end = parseInt(span.dataset.end);
+                // Check if current speaking character falls within this word block
+                if (charIndex >= start && charIndex < end) {
+                    span.classList.add('active');
+                    span.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                } else {
+                    span.classList.remove('active');
+                }
+            });
+        }
+    };
+
+    utterance.onstart = () => {
+        console.log('Reading started...');
+    };
+
+    utterance.onend = () => {
+        console.log('Reading finished.');
+        cleanupReadingUI();
+    };
+
+    utterance.onerror = (err) => {
+        console.error('Speech error:', err);
+        cleanupReadingUI();
+    };
+    
+    state.audio = utterance;
     speechSynthesis.speak(utterance);
 }
 
 function stopVoice() {
     speechSynthesis.cancel();
+    cleanupReadingUI();
 }
 
-function selectHotspot(hotspot) {
+function cleanupReadingUI() {
+    if (el.captionBar) el.captionBar.classList.add('hidden');
+    if (el.hotspotLayer) el.hotspotLayer.classList.remove('active-reading');
+    document.querySelectorAll('.hotspot-box.reading').forEach(b => b.classList.remove('reading'));
+    state.activeReadingBox = null;
+}
+
+function selectHotspot(hotspot, element) {
     state.currentHotspot = hotspot;
+    
+    // V5: Visual Spotlight
+    cleanupReadingUI(); // Reset prev
+    if (element) {
+        element.classList.add('reading');
+        el.hotspotLayer.classList.add('active-reading');
+        state.activeReadingBox = element;
+    }
+    
     playCurrentHotspot();
 }
 
