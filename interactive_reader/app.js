@@ -566,11 +566,52 @@ async function runOCRCurrentPage() {
         const result = await response.json();
         console.log('OCR result:', result);
         
-        const paragraphs = result.paragraphs || [];
-        el.ocrStatus.textContent = `Found ${paragraphs.length} text blocks`;
-        
+        let paragraphs = result.paragraphs || [];
+        el.ocrStatus.textContent = `Found ${paragraphs.length} raw text blocks`;
+
         if (paragraphs.length > 0) {
-            // Convert OCR results to hotspots and store in session state
+            const imgW = el.pageImage.naturalWidth;
+            const imgH = el.pageImage.naturalHeight;
+            const pageArea = imgW * imgH;
+
+            // --- V4 Refinement: Fine-grained Layout Analysis ---
+            
+            // 1. Filter: Remove noise blocks (covers >90% of page)
+            paragraphs = paragraphs.filter(p => {
+                const area = (p.bbox.x1 - p.bbox.x0) * (p.bbox.y1 - p.bbox.y0);
+                return area < pageArea * 0.9;
+            });
+
+            // 2. Proximity-based Clustering (Header-Body Merging)
+            // Sort by Y to find vertically adjacent blocks
+            paragraphs.sort((a, b) => a.bbox.y0 - b.bbox.y0);
+            
+            const refined = [];
+            for (let i = 0; i < paragraphs.length; i++) {
+                let curr = paragraphs[i];
+                if (i < paragraphs.length - 1) {
+                    let next = paragraphs[i + 1];
+                    const gapY = next.bbox.y0 - curr.bbox.y1;
+                    const overlapX = Math.max(0, Math.min(curr.bbox.x1, next.bbox.x1) - Math.max(curr.bbox.x0, next.bbox.x0));
+                    const minW = Math.min(curr.bbox.x1 - curr.bbox.x0, next.bbox.x1 - next.bbox.x0);
+                    
+                    // Trigger merge if:
+                    // - They are vertically very close (gap < 2% of page height)
+                    // - They overlap horizontally significantly (overlap > 50% of thinner block)
+                    // - Current block looks like a header (short)
+                    if (gapY >= 0 && gapY < (imgH * 0.02) && overlapX > (minW * 0.5)) {
+                        next.bbox.y0 = curr.bbox.y0;
+                        next.bbox.x0 = Math.min(next.bbox.x0, curr.bbox.x0);
+                        next.bbox.x1 = Math.max(next.bbox.x1, curr.bbox.x1);
+                        next.text = curr.text + " " + next.text;
+                        continue; // Skip pushing 'curr' as it's merged into 'next'
+                    }
+                }
+                refined.push(curr);
+            }
+            paragraphs = refined;
+
+            // Convert and store in session state
             const pageNum = state.currentPage + 1;
             state.pageEdits[pageNum] = paragraphs.map(p => ({
                 x: p.bbox.x0,
@@ -582,7 +623,7 @@ async function runOCRCurrentPage() {
             }));
             
             renderHotspots(state.pageEdits[pageNum]);
-            showToast(`Found ${paragraphs.length} text regions`);
+            showToast(`Layout refined: ${paragraphs.length} hotspots created`);
         }
         
         statusEl.textContent = 'AI Scan Page';
