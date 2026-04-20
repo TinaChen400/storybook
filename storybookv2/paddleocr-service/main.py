@@ -78,35 +78,56 @@ def merge_blocks(raw_results):
 
     final_blocks = []
 
-    # 2. Intra-Column Merging (Improved with stricter rules)
+    # 2. Intra-Column Merging (Improved with V8 Header-Aware Splitting)
     for col in columns:
+        if not col: continue
+        
+        # Calculate median height for the whole column to identify headers
+        heights = sorted([l['h'] for l in col])
+        median_h = heights[len(heights)//2] if heights else 1
+        
         # Sort lines within column by Y
         col.sort(key=lambda l: l['y0'])
         
         merged_groups = []
-        if not col: continue
-        
         current_group = [col[0]]
+        
         for i in range(1, len(col)):
             prev = current_group[-1]
             curr = col[i]
             
             dy = curr['y0'] - prev['y1']
             
-            # V7 Optimization: Stricter Alignment and Proximity
-            # Only merge if:
-            # 1. Vertical gap is small (1.2x line height)
-            # 2. Left edges are roughly aligned (within 15px) - suggests same paragraph
-            # 3. Or center points are very close horizontally
+            # V8 Enrichment: Header detection (Bold/Large text)
+            # Headers are usually significantly taller than body text
+            is_header = curr['h'] > (median_h * 1.3)
+            was_header = prev['h'] > (median_h * 1.3)
             
+            # V7 Context: Stricter Alignment
             dx_left = abs(curr['x0'] - prev['x0'])
             is_aligned = dx_left < 15
             
-            if dy < (prev['h'] * 1.2) and is_aligned:
-                current_group.append(curr)
-            else:
+            # Merging Rules for V8:
+            # 1. NEW Headers ALWAYS start a group
+            # 2. Body text don't append to a single-line Header if gap is large
+            # 3. Aligned body text merges normally
+            
+            if is_header:
+                # Forced split: New header detected
                 merged_groups.append(current_group)
                 current_group = [curr]
+            elif was_header and dy > (prev['h'] * 1.0):
+                # Split: Body text below a header should be its own block if not immediate
+                merged_groups.append(current_group)
+                current_group = [curr]
+            elif dy < (prev['h'] * 1.25) and is_aligned:
+                # Merge: Standard paragraph flow
+                current_group.append(curr)
+            else:
+                # Split: Large gap or misalignment
+                merged_groups.append(current_group)
+                current_group = [curr]
+                
         merged_groups.append(current_group)
 
         # 3. Form final blocks for this column

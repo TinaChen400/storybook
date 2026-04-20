@@ -744,8 +744,9 @@ body {
 
 
 .hotspot-box:hover {
-    background-color: rgba(77, 150, 255, 0.05);
-    border: 1px dashed rgba(77, 150, 255, 0.3);
+    background-color: rgba(77, 150, 255, 0.15); /* More visible tint */
+    border: 1px dashed rgba(77, 150, 255, 0.6);   /* More visible dashed line */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);      /* Soft shadow for depth */
 }
 
 .hotspot-text {
